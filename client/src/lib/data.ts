@@ -61,6 +61,7 @@ export interface RoofTent {
 // ────────────────────────────────────────────────────────────────────────
 
 export const IMG = {
+  // Original hero set
   heroDefender:
     "https://d2xsxph8kpxj0f.cloudfront.net/310519663500711512/2ZgSRYHp78vzg3narkm4e6/ovrlnd-hero-defender-2kouzY2ssf3t64oAuf3qxM.webp",
   heroGrenadier:
@@ -71,6 +72,27 @@ export const IMG = {
     "https://d2xsxph8kpxj0f.cloudfront.net/310519663500711512/2ZgSRYHp78vzg3narkm4e6/ovrlnd-tent-detail-Qf2ynbADkAhaEVXoAtKJKR.webp",
   topoTexture:
     "https://d2xsxph8kpxj0f.cloudfront.net/310519663500711512/2ZgSRYHp78vzg3narkm4e6/ovrlnd-topo-texture-4sXGetx8BBeCeVUCzUSikD.webp",
+  // Built-vehicle hero set (Want-Creation visual language)
+  builtDefender:
+    "https://d2xsxph8kpxj0f.cloudfront.net/310519663500711512/2ZgSRYHp78vzg3narkm4e6/ovrlnd-defender-built-FMQkiVnZViqMM5g3CBckcF.webp",
+  builtGwagon:
+    "https://d2xsxph8kpxj0f.cloudfront.net/310519663500711512/2ZgSRYHp78vzg3narkm4e6/ovrlnd-gwagon-built-eRDLdk37N7BRMD5uWBUdMt.webp",
+  builtLandcruiser300:
+    "https://d2xsxph8kpxj0f.cloudfront.net/310519663500711512/2ZgSRYHp78vzg3narkm4e6/ovrlnd-landcruiser300-built-KKpyLYaYRXLt5kpSK73ZEW.webp",
+  builtGrenadier:
+    "https://d2xsxph8kpxj0f.cloudfront.net/310519663500711512/2ZgSRYHp78vzg3narkm4e6/ovrlnd-grenadier-built-oYkTR8NLb5DKkGR2yeVwWZ.webp",
+  builtRangerover:
+    "https://d2xsxph8kpxj0f.cloudfront.net/310519663500711512/2ZgSRYHp78vzg3narkm4e6/ovrlnd-rangerover-built-mKGUUtJCsX8YZEhijzNVwg.webp",
+  builtCybertruck:
+    "https://d2xsxph8kpxj0f.cloudfront.net/310519663500711512/2ZgSRYHp78vzg3narkm4e6/ovrlnd-cybertruck-built-GnJmuBxuW3tFAojfVnuSB2.webp",
+  builtModelX:
+    "https://d2xsxph8kpxj0f.cloudfront.net/310519663500711512/2ZgSRYHp78vzg3narkm4e6/ovrlnd-modelx-built-o2hCwWnJzo9J5rtn7hVNyV.webp",
+  builtRanger:
+    "https://d2xsxph8kpxj0f.cloudfront.net/310519663500711512/2ZgSRYHp78vzg3narkm4e6/ovrlnd-ranger-built-Vhn3g3LaytX8whVuRgztVD.webp",
+  builtHilux:
+    "https://d2xsxph8kpxj0f.cloudfront.net/310519663500711512/2ZgSRYHp78vzg3narkm4e6/ovrlnd-hilux-built-V7jpjcyYayb3MCYnhH6NXp.webp",
+  installDetail:
+    "https://d2xsxph8kpxj0f.cloudfront.net/310519663500711512/2ZgSRYHp78vzg3narkm4e6/ovrlnd-install-detail-BgzehWvPGRWJiDSoAjmuUB.webp",
 };
 
 // Unsplash fallbacks for vehicle thumbnails (less prominent areas)
@@ -109,8 +131,8 @@ export const VEHICLES: Vehicle[] = [
     basePrice: "$98,000 — $230,000",
     popularityRank: 1,
     status: "live",
-    heroImage: IMG.heroDefender,
-    thumbnail: IMG.heroDefender,
+    heroImage: IMG.builtDefender,
+    thumbnail: IMG.builtDefender,
     tagline: "The icon, reborn.",
     notes:
       "The new Defender platform is the most fitout-friendly heritage 4x4 on the market — generous roof load, accessible electrical architecture, and a thriving aftermarket.",
@@ -127,7 +149,8 @@ export const VEHICLES: Vehicle[] = [
     basePrice: "$235,000 — $345,000",
     popularityRank: 2,
     status: "live",
-    thumbnail: UNSPLASH.gwagon,
+    heroImage: IMG.builtGwagon,
+    thumbnail: IMG.builtGwagon,
     tagline: "Engineered, then conquered.",
     notes:
       "The G-Class is the trophy purchase of the category. Buyers want fitouts that respect the silhouette — restraint matters more than maximalism.",
@@ -144,7 +167,8 @@ export const VEHICLES: Vehicle[] = [
     basePrice: "$95,000 — $148,000",
     popularityRank: 3,
     status: "live",
-    thumbnail: UNSPLASH.landcruiser,
+    heroImage: IMG.builtLandcruiser300,
+    thumbnail: IMG.builtLandcruiser300,
     tagline: "The benchmark.",
     notes:
       "The 300 Series is the most heavily-fitted vehicle in Australia. Long aftermarket pedigree, vast parts ecosystem, and the most exhaustive comparison data available.",
@@ -161,7 +185,7 @@ export const VEHICLES: Vehicle[] = [
     basePrice: "$72,500 — $99,990",
     popularityRank: 4,
     status: "comingSoon",
-    thumbnail: UNSPLASH.landcruiser,
+    thumbnail: IMG.builtLandcruiser300,
     tagline: "The next-gen workhorse.",
     notes: "Brand-new platform — fitout standards still being established by the Tier 1 outfitters.",
   },
@@ -177,7 +201,8 @@ export const VEHICLES: Vehicle[] = [
     basePrice: "$245,000 — $420,000",
     popularityRank: 5,
     status: "comingSoon",
-    thumbnail: UNSPLASH.rangerover,
+    heroImage: IMG.builtRangerover,
+    thumbnail: IMG.builtRangerover,
     tagline: "Luxury, off-road.",
     notes:
       "The fitout philosophy here is restraint — discreet platforms, low-profile tents, no compromises on cabin luxury.",
@@ -194,7 +219,8 @@ export const VEHICLES: Vehicle[] = [
     basePrice: "$110,000 — $180,000",
     popularityRank: 6,
     status: "live",
-    thumbnail: UNSPLASH.grenadier,
+    heroImage: IMG.builtGrenadier,
+    thumbnail: IMG.builtGrenadier,
     tagline: "Built for purpose.",
     notes:
       "Designed from day one for fitout — factory roof rails, accessible electrical, and a chassis that takes load. The thinking-buyer's choice.",
@@ -213,7 +239,8 @@ export const VEHICLES: Vehicle[] = [
     basePrice: "$180,000 — $260,000 (grey import)",
     popularityRank: 7,
     status: "comingSoon",
-    thumbnail: UNSPLASH.cybertruck,
+    heroImage: IMG.builtCybertruck,
+    thumbnail: IMG.builtCybertruck,
     tagline: "Electrons over the horizon.",
     notes:
       "Onboard 240V/120V power changes the overland equation entirely — the camp kitchen runs from the truck. Fitout pioneers welcome.",
@@ -230,7 +257,7 @@ export const VEHICLES: Vehicle[] = [
     basePrice: "$200,000+ (grey import)",
     popularityRank: 8,
     status: "comingSoon",
-    thumbnail: UNSPLASH.rivian,
+    thumbnail: IMG.builtCybertruck,
     tagline: "Built for the unmarked road.",
     notes: "The first true EV designed with overland intent. Limited Australian presence — fitout is bespoke.",
   },
@@ -246,7 +273,8 @@ export const VEHICLES: Vehicle[] = [
     basePrice: "$150,000 — $185,000",
     popularityRank: 9,
     status: "comingSoon",
-    thumbnail: UNSPLASH.modelx,
+    heroImage: IMG.builtModelX,
+    thumbnail: IMG.builtModelX,
     tagline: "Soft-road overlanding.",
     notes:
       "Roof-load limits are tight — but with a sub-70kg low-profile RTT and a thoughtful platform, the X is a genuine glamping rig.",
@@ -263,7 +291,7 @@ export const VEHICLES: Vehicle[] = [
     basePrice: "$120,000 — $138,000",
     popularityRank: 10,
     status: "comingSoon",
-    thumbnail: UNSPLASH.lexusgx,
+    thumbnail: IMG.builtLandcruiser300,
     tagline: "Toyota DNA, Lexus polish.",
     notes:
       "Body-on-frame, twin-turbo V6, factory Overtrail spec — the GX is the sleeper Tier 2 platform. Watch this space.",
@@ -282,8 +310,8 @@ export const VEHICLES: Vehicle[] = [
     basePrice: "$50,000 — $90,000",
     popularityRank: 11,
     status: "live",
-    heroImage: IMG.heroRanger,
-    thumbnail: IMG.heroRanger,
+    heroImage: IMG.builtRanger,
+    thumbnail: IMG.builtRanger,
     tagline: "The new benchmark ute.",
     notes:
       "The next-gen Ranger has rapidly become the most-modified ute in Australia — and the Alu-Cab Canopy Camper changes the conversation entirely.",
@@ -300,7 +328,7 @@ export const VEHICLES: Vehicle[] = [
     basePrice: "$60,000 — $85,000",
     popularityRank: 12,
     status: "comingSoon",
-    thumbnail: UNSPLASH.amarok,
+    thumbnail: IMG.builtRanger,
     tagline: "Ranger underneath, Amarok on top.",
     notes: "Shares its bones with the Ranger — most fitout solutions cross-fit with minor adaptation.",
   },
@@ -316,7 +344,8 @@ export const VEHICLES: Vehicle[] = [
     basePrice: "$45,000 — $75,000",
     popularityRank: 13,
     status: "comingSoon",
-    thumbnail: UNSPLASH.hilux,
+    heroImage: IMG.builtHilux,
+    thumbnail: IMG.builtHilux,
     tagline: "The Australian default.",
     notes: "The widest aftermarket support of any Tier 3 ute. Whatever you want fitted, someone has done it.",
   },
@@ -332,7 +361,7 @@ export const VEHICLES: Vehicle[] = [
     basePrice: "$48,000 — $73,000",
     popularityRank: 14,
     status: "comingSoon",
-    thumbnail: UNSPLASH.dmax,
+    thumbnail: IMG.builtHilux,
     tagline: "Quiet capability.",
     notes: "Increasingly chosen by buyers who want a HiLux-class ute without the HiLux markup.",
   },
