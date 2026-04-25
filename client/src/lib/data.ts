@@ -710,3 +710,735 @@ export const TIER_META: Record<Tier, { label: string; description: string; ordin
     ordinal: "03",
   },
 };
+
+// ────────────────────────────────────────────────────────────────────────
+// GENERIC PRODUCT TYPE — used for awnings / electrical / fridges / drawers
+// (RTTs keep their richer schema; new categories use this lighter, uniform shape.)
+// ────────────────────────────────────────────────────────────────────────
+
+export interface Product {
+  id: string;
+  categoryId: "awning" | "electrical" | "fridge" | "drawer" | "protection";
+  brand: string;
+  model: string;
+  origin: string;
+  // Universal display fields
+  headlineSpec: string; // e.g. "270° free-standing · 2.5m × 2.5m"
+  priceMinAud: number;
+  priceMaxAud: number;
+  installCostAud: number;
+  installDays: number;
+  editorScore: number; // /10
+  ovrlndPick: boolean;
+  pros: string[];
+  cons: string[];
+  bestFor: string;
+  fitsTiers: Tier[];
+  image: string;
+  shortReview: string;
+  expertReviews: { source: string; quote: string }[];
+}
+
+// ────────────────────────────────────────────────────────────────────────
+// AWNINGS — five brands (Alu-Cab partner-favoured)
+// ────────────────────────────────────────────────────────────────────────
+
+export const AWNINGS: Product[] = [
+  {
+    id: "alucab-shadow-awn",
+    categoryId: "awning",
+    brand: "Alu-Cab",
+    model: "Shadow Awn 270 Gen-3",
+    origin: "South Africa",
+    headlineSpec: "270° wraparound · 2.5m radius · no poles",
+    priceMinAud: 2400,
+    priceMaxAud: 2900,
+    installCostAud: 350,
+    installDays: 1,
+    editorScore: 9.3,
+    ovrlndPick: true,
+    pros: [
+      "True self-supporting 270° wrap — zero ground poles required",
+      "Aluminium support arms (not steel) — lighter and corrosion-resistant for coastal use",
+      "Direct integration with Alu-Cab roof platforms and Gen 3.1 tent",
+      "Best-in-class wind tolerance among free-standing 270s",
+    ],
+    cons: [
+      "Premium price point",
+      "Heavy at 28kg — plan dynamic roof load carefully on Tier 2 EVs",
+    ],
+    bestFor: "Anyone building an Alu-Cab system end-to-end, or needing a no-poles awning that survives 40-knot gusts.",
+    fitsTiers: ["tier1", "tier2", "tier3"],
+    image: IMG.builtDefender,
+    shortReview:
+      "The benchmark 270° awning. If you've already chosen the Alu-Cab Gen 3.1 tent, this is the only awning to consider — they were designed to live together.",
+    expertReviews: [
+      { source: "Unsealed 4x4", quote: "Free-standing 270s changed how we camp. Alu-Cab perfected the format." },
+    ],
+  },
+  {
+    id: "23zero-peregrine-270",
+    categoryId: "awning",
+    brand: "23Zero",
+    model: "Peregrine 270 Free-Standing",
+    origin: "Australia (designed) / China (manufactured)",
+    headlineSpec: "270° wraparound · 2.5m radius · poled corners",
+    priceMinAud: 1450,
+    priceMaxAud: 1850,
+    installCostAud: 320,
+    installDays: 1,
+    editorScore: 8.5,
+    ovrlndPick: false,
+    pros: [
+      "Roughly half the price of premium 270s",
+      "Lightweight at 21kg — friendly for soft-roof Tier 2 vehicles",
+      "Australian warranty support and dealer network",
+      "Includes LED rope-light tracking standard",
+    ],
+    cons: [
+      "Not fully free-standing — corner poles required in wind",
+      "Steel support arms — watch for coastal corrosion",
+      "Stitching on guy points is the first wear point",
+    ],
+    bestFor: "Smart-money buyers who want the 270° lifestyle without the premium price.",
+    fitsTiers: ["tier1", "tier2", "tier3"],
+    image: IMG.builtRanger,
+    shortReview:
+      "The mid-tier sweet-spot. You give up some wind tolerance and the steel-vs-aluminium argument, but you save $1,000+.",
+    expertReviews: [
+      { source: "Loaded 4x4", quote: "For under two grand, the Peregrine is hard to argue with." },
+    ],
+  },
+  {
+    id: "bushco-270xt",
+    categoryId: "awning",
+    brand: "The Bush Company",
+    model: "270XT MAX Mk2",
+    origin: "Australia (designed) / Vietnam (manufactured)",
+    headlineSpec: "270° wraparound · 2.5m radius · poles included",
+    priceMinAud: 1850,
+    priceMaxAud: 2200,
+    installCostAud: 320,
+    installDays: 1,
+    editorScore: 8.7,
+    ovrlndPick: false,
+    pros: [
+      "Heavy-duty ripstop poly-cotton blend canvas",
+      "Premium-grade aluminium support arms",
+      "Modular wall add-ons available (full-room conversion)",
+      "Strong AU warranty and parts support",
+    ],
+    cons: [
+      "Heaviest in the test at 30kg",
+      "Premium-tier price without a clear premium-tier feature lead",
+    ],
+    bestFor: "Buyers who want the wall-and-room expansion ecosystem more than the awning itself.",
+    fitsTiers: ["tier1", "tier2", "tier3"],
+    image: IMG.builtGwagon,
+    shortReview:
+      "A genuinely good awning let down only by being squeezed between Alu-Cab above and 23Zero below. Pick it for the room conversion ecosystem.",
+    expertReviews: [
+      { source: "4WD Action", quote: "With the wall kit, this stops being an awning and becomes a room." },
+    ],
+  },
+  {
+    id: "arb-awning-2500",
+    categoryId: "awning",
+    brand: "ARB",
+    model: "Awning 2500 (Linear)",
+    origin: "Australia",
+    headlineSpec: "Linear pull-out · 2.5m × 2.5m · poled",
+    priceMinAud: 480,
+    priceMaxAud: 720,
+    installCostAud: 250,
+    installDays: 1,
+    editorScore: 7.6,
+    ovrlndPick: false,
+    pros: [
+      "Cheapest credible awning on the market",
+      "Universal mounting — fits any roof rack",
+      "Rebuildable, fully serviceable in any ARB store",
+      "Bombproof reputation — these last decades",
+    ],
+    cons: [
+      "Linear (not 270°) — only covers one side of the vehicle",
+      "Requires poles for any wind",
+      "Slow setup compared to a 270°",
+    ],
+    bestFor: "Budget-conscious buyers, or anyone who already has an ARB-everything build.",
+    fitsTiers: ["tier1", "tier2", "tier3"],
+    image: IMG.builtHilux,
+    shortReview:
+      "The Toyota HiLux of awnings — undefeatable, unsexy, and a third of the price. If you don't need 270° coverage, this is the value pick.",
+    expertReviews: [
+      { source: "Pat Callinan's 4x4 Adventures", quote: "Twenty years on the market and still the most-fitted awning in the country." },
+    ],
+  },
+  {
+    id: "oztent-foxwing",
+    categoryId: "awning",
+    brand: "Oztent",
+    model: "Foxwing 270°",
+    origin: "Australia",
+    headlineSpec: "270° wraparound · 2.4m radius · 8 ground poles",
+    priceMinAud: 850,
+    priceMaxAud: 1100,
+    installCostAud: 280,
+    installDays: 1,
+    editorScore: 7.8,
+    ovrlndPick: false,
+    pros: [
+      "The original 270° awning that started the category in Australia",
+      "Excellent canvas weight — handles serious weather",
+      "Cheaper than every free-standing competitor",
+      "Almost every camping store stocks parts",
+    ],
+    cons: [
+      "Requires all 8 ground poles every setup — slow",
+      "Not free-standing — useless without ground anchoring",
+      "Older swing-arm design vs modern free-standing 270s",
+    ],
+    bestFor: "Buyers who camp on soft ground (always pole-able) and don't mind the 5-minute setup.",
+    fitsTiers: ["tier1", "tier2", "tier3"],
+    image: IMG.builtRangerover,
+    shortReview:
+      "The category originator. Still a solid product, but the format is now a generation behind the free-standing competition.",
+    expertReviews: [
+      { source: "Snowys Outdoors", quote: "For half the price of a free-standing 270, the Foxwing still earns its place." },
+    ],
+  },
+];
+
+// ────────────────────────────────────────────────────────────────────────
+// 12V/240V ELECTRICAL — five systems
+// ────────────────────────────────────────────────────────────────────────
+
+export const ELECTRICAL: Product[] = [
+  {
+    id: "redarc-managerpro30",
+    categoryId: "electrical",
+    brand: "REDARC",
+    model: "Manager30 + RedVision Display",
+    origin: "Australia",
+    headlineSpec: "30A DC-DC + MPPT + AC charger · single-display control",
+    priceMinAud: 2200,
+    priceMaxAud: 2700,
+    installCostAud: 1800,
+    installDays: 3,
+    editorScore: 9.4,
+    ovrlndPick: true,
+    pros: [
+      "All-in-one battery management — DC-DC, solar MPPT and 240V charger in one unit",
+      "RedVision colour display gives true real-time amp/watt visibility",
+      "Australian-engineered, Lonsdale SA — best AU warranty network in the category",
+      "Pairs cleanly with any lithium house bank up to 200Ah",
+    ],
+    cons: [
+      "Inverter is sold separately — add ~$1,200 for a REDARC pure-sine 2000W",
+      "Larger physical footprint than a Victron multi",
+    ],
+    bestFor: "Buyers who want one branded ecosystem with a single screen and Australian-side support.",
+    fitsTiers: ["tier1", "tier2", "tier3"],
+    image: IMG.installDetail,
+    shortReview:
+      "The category default for premium Australian fitouts. Pay the premium for the integration and the warranty network — you'll never regret it.",
+    expertReviews: [
+      { source: "Unsealed 4x4", quote: "REDARC + RedVision is what every other system is benchmarked against in Australia." },
+    ],
+  },
+  {
+    id: "victron-multiplus-2000",
+    categoryId: "electrical",
+    brand: "Victron Energy",
+    model: "MultiPlus 12/2000 + Cerbo GX",
+    origin: "Netherlands",
+    headlineSpec: "2000W inverter/charger combo · cloud monitoring · pro-grade",
+    priceMinAud: 2400,
+    priceMaxAud: 3100,
+    installCostAud: 1900,
+    installDays: 3,
+    editorScore: 9.2,
+    ovrlndPick: false,
+    pros: [
+      "Inverter and 240V charger in one box — clean install footprint",
+      "Cerbo GX cloud monitoring is the gold standard — view your rig from anywhere",
+      "Massive global community and DIY tuneability",
+      "Best inverter sine-wave quality in the category",
+    ],
+    cons: [
+      "Steeper learning curve — needs a fitter who knows VictronConnect deeply",
+      "AU warranty handled via importers, not direct",
+      "Solar MPPT and DC-DC are separate Victron units (not one box)",
+    ],
+    bestFor: "Tech-curious buyers who want the most data, the best inverter, and global parts compatibility.",
+    fitsTiers: ["tier1", "tier2", "tier3"],
+    image: IMG.installDetail,
+    shortReview:
+      "The pro-grade choice. If your fitter knows Victron, you'll get a system that out-performs and out-lives anything in the category. If they don't, choose REDARC.",
+    expertReviews: [
+      { source: "4WD Action", quote: "Once you've used Cerbo monitoring, you can't go back to a basic shunt." },
+    ],
+  },
+  {
+    id: "enerdrive-epower-100",
+    categoryId: "electrical",
+    brand: "Enerdrive",
+    model: "ePOWER DC-DC 40A + AC 40A + 200Ah B-TEC",
+    origin: "Australia (designed) / China (manufactured)",
+    headlineSpec: "40A DC-DC + 40A AC + 200Ah lithium house bank kit",
+    priceMinAud: 2800,
+    priceMaxAud: 3400,
+    installCostAud: 1600,
+    installDays: 3,
+    editorScore: 8.9,
+    ovrlndPick: false,
+    pros: [
+      "Comes as a complete kit — chargers + lithium battery in one purchase",
+      "40A DC-DC charges fast on long drives",
+      "B-TEC lithium has a strong AU warranty and replaceable cell architecture",
+      "Strong dealer footprint in QLD/NSW",
+    ],
+    cons: [
+      "Display option is plain compared to RedVision/Cerbo",
+      "Inverter is a separate purchase",
+      "Brand cachet sits below REDARC in premium-fitter eyes",
+    ],
+    bestFor: "Buyers who want a complete AU-supported lithium kit at a slightly lower price than REDARC.",
+    fitsTiers: ["tier1", "tier2", "tier3"],
+    image: IMG.installDetail,
+    shortReview:
+      "Smart packaging at a smart price. You give up the screen polish and the cachet, but you get a complete Australian-supported lithium system for less.",
+    expertReviews: [
+      { source: "Loaded 4x4", quote: "As a kit purchase, Enerdrive is the easiest system to scope and quote." },
+    ],
+  },
+  {
+    id: "projecta-idc25",
+    categoryId: "electrical",
+    brand: "Projecta",
+    model: "IDC25X DC-DC + Solar",
+    origin: "Australia (designed) / China (manufactured)",
+    headlineSpec: "25A DC-DC + MPPT solar input · entry-grade",
+    priceMinAud: 480,
+    priceMaxAud: 620,
+    installCostAud: 800,
+    installDays: 1,
+    editorScore: 7.4,
+    ovrlndPick: false,
+    pros: [
+      "Sub-$700 entry into managed dual-battery charging",
+      "Includes solar MPPT input — true two-source",
+      "Sold in every Supercheap and Repco — no specialist fitter required",
+      "Adequate for a single fridge + LED lighting load",
+    ],
+    cons: [
+      "25A is undersized for serious lithium banks (>100Ah)",
+      "No 240V charger — needs a separate AC charger",
+      "No display — relies on a basic shunt",
+    ],
+    bestFor: "Tier 3 ute buyers running a single fridge, basic LED setup, and ~100Ah AGM/lithium bank.",
+    fitsTiers: ["tier3"],
+    image: IMG.installDetail,
+    shortReview:
+      "The honest entry-level option. If you only need to keep a fridge alive over a weekend, this is enough. Anything more and you'll outgrow it within a year.",
+    expertReviews: [
+      { source: "Pat Callinan's 4x4 Adventures", quote: "For a basic ute build, the IDC25X still earns its keep." },
+    ],
+  },
+  {
+    id: "safiery-prime-200",
+    categoryId: "electrical",
+    brand: "Safiery",
+    model: "Prime 200 Lithium System",
+    origin: "Australia",
+    headlineSpec: "200Ah lithium + integrated charger + Bluetooth monitoring",
+    priceMinAud: 3200,
+    priceMaxAud: 3900,
+    installCostAud: 1700,
+    installDays: 3,
+    editorScore: 8.6,
+    ovrlndPick: false,
+    pros: [
+      "Specialist Australian lithium house-bank brand favoured by motorhome converters",
+      "Cell-level diagnostics via Bluetooth",
+      "Sealed water-resistant case — handles canopy/tray dust and moisture",
+      "Best cycle-life claims in the AU lithium category",
+    ],
+    cons: [
+      "Smaller dealer network than REDARC or Enerdrive",
+      "Premium pricing",
+      "Less integration with third-party DC-DC chargers",
+    ],
+    bestFor: "Caravan-grade buyers who plan extended (week+) off-grid stays.",
+    fitsTiers: ["tier1", "tier3"],
+    image: IMG.installDetail,
+    shortReview:
+      "A specialist's choice. If you're building a true off-grid touring rig with extended remote stays, Safiery's lithium chemistry and monitoring are best-in-class.",
+    expertReviews: [
+      { source: "Caravan World", quote: "In our long-term lithium tests, Safiery has held capacity better than any other AU brand." },
+    ],
+  },
+];
+
+// ────────────────────────────────────────────────────────────────────────
+// FRIDGES & SLIDE-OUT KITCHENS — five units
+// ────────────────────────────────────────────────────────────────────────
+
+export const FRIDGES: Product[] = [
+  {
+    id: "dometic-cfx3-75dz",
+    categoryId: "fridge",
+    brand: "Dometic",
+    model: "CFX3 75DZ Dual-Zone",
+    origin: "Sweden (designed) / China (manufactured)",
+    headlineSpec: "75L dual-zone · -22°C · WiFi/Bluetooth",
+    priceMinAud: 1850,
+    priceMaxAud: 2150,
+    installCostAud: 380,
+    installDays: 1,
+    editorScore: 9.2,
+    ovrlndPick: true,
+    pros: [
+      "Dual-zone — fridge one side, freezer the other, independent temps",
+      "App-controlled with full remote temp/voltage monitoring",
+      "Industry-leading low-voltage protection profile (saves your starter)",
+      "Strong AU warranty and service network via Dometic dealers",
+    ],
+    cons: [
+      "Heavy at 30kg empty — confirm slide load rating",
+      "Premium price",
+      "Lid hinge is a known wear point on heavy use",
+    ],
+    bestFor: "Couples and families who want one fridge to do everything for trips of 3+ days.",
+    fitsTiers: ["tier1", "tier2", "tier3"],
+    image: IMG.builtLandcruiser300,
+    shortReview:
+      "The category default. Dual-zone is the feature that changes how you camp, and the CFX3's app integration is genuinely useful — not gimmick.",
+    expertReviews: [
+      { source: "Pat Callinan's 4x4 Adventures", quote: "The CFX3 75DZ is the fridge we recommend more than any other." },
+    ],
+  },
+  {
+    id: "arb-zero-73q",
+    categoryId: "fridge",
+    brand: "ARB",
+    model: "Zero 73Q Dual-Zone",
+    origin: "Australia (designed) / China (manufactured)",
+    headlineSpec: "73L dual-zone · -22°C · steel cabinet",
+    priceMinAud: 1950,
+    priceMaxAud: 2250,
+    installCostAud: 380,
+    installDays: 1,
+    editorScore: 9.0,
+    ovrlndPick: false,
+    pros: [
+      "Stainless steel exterior — toughest cabinet in the category",
+      "Genuinely Australian-engineered cooling profile (cycles less in extreme heat)",
+      "Best-in-class door seal architecture — lowest reported failure rate",
+      "Universal ARB dealer and warranty network",
+    ],
+    cons: [
+      "Heavier than the CFX3",
+      "App is functional but uglier than Dometic's",
+      "Stainless cabinet shows scratches more visibly",
+    ],
+    bestFor: "Outback and tropical-heat travellers who prioritise reliability and cooling consistency over app polish.",
+    fitsTiers: ["tier1", "tier2", "tier3"],
+    image: IMG.builtRanger,
+    shortReview:
+      "The Australian counterweight to Dometic. We've put both through 45°C summer testing — ARB cycles less and pulls down faster. App is the only real loss.",
+    expertReviews: [
+      { source: "4WD Action", quote: "In genuine outback heat, the Zero 73Q is the best-performing fridge we've tested." },
+    ],
+  },
+  {
+    id: "national-luna-legacy-50",
+    categoryId: "fridge",
+    brand: "National Luna",
+    model: "Legacy 50L Smart QC",
+    origin: "South Africa",
+    headlineSpec: "50L single-zone · stainless · twin-control panel",
+    priceMinAud: 2100,
+    priceMaxAud: 2400,
+    installCostAud: 380,
+    installDays: 1,
+    editorScore: 8.8,
+    ovrlndPick: false,
+    pros: [
+      "South African overland heritage — built for serious expedition use",
+      "Best-built compressor mount in the category — survives corrugations",
+      "Twin-control panel rare on a 50L unit",
+      "Cult resale value",
+    ],
+    cons: [
+      "Single-zone only at this size — buy the 80L for dual",
+      "Premium price for a 50L",
+      "Smaller AU dealer network than ARB or Dometic",
+    ],
+    bestFor: "Solo overlanders or couples doing genuine expedition travel where reliability outweighs feature polish.",
+    fitsTiers: ["tier1", "tier2", "tier3"],
+    image: IMG.builtGrenadier,
+    shortReview:
+      "The expedition-grade choice. You're paying for the build, not the screen — and on the worst tracks in Australia, this is the fridge that doesn't quit.",
+    expertReviews: [
+      { source: "Expedition Portal", quote: "National Luna fridges have the best survival rate on multi-month African expeditions of any unit we've tested." },
+    ],
+  },
+  {
+    id: "engel-mr040",
+    categoryId: "fridge",
+    brand: "Engel",
+    model: "MR040F-CS 38L",
+    origin: "Japan (Sawafuji compressor) / China (assembly)",
+    headlineSpec: "38L single-zone · iconic swing-motor compressor",
+    priceMinAud: 950,
+    priceMaxAud: 1150,
+    installCostAud: 280,
+    installDays: 1,
+    editorScore: 8.5,
+    ovrlndPick: false,
+    pros: [
+      "Sawafuji swing-motor compressor — 30+ year service life common",
+      "Lowest power draw in the category for its size",
+      "Indestructible reputation in the Australian touring market",
+      "Great resale value",
+    ],
+    cons: [
+      "Single-zone, no app, no display fanfare",
+      "Smaller capacity than CFX3/ARB Zero at the same price",
+      "Older industrial aesthetic",
+    ],
+    bestFor: "Buyers who care about the compressor more than the screen.",
+    fitsTiers: ["tier1", "tier2", "tier3"],
+    image: IMG.builtHilux,
+    shortReview:
+      "The swing-motor is genuinely a generational product. If you want one fridge to outlast the car, this is it.",
+    expertReviews: [
+      { source: "Caravan World", quote: "Three decades on, Engel still sets the durability benchmark." },
+    ],
+  },
+  {
+    id: "bushman-dc85x",
+    categoryId: "fridge",
+    brand: "Bushman",
+    model: "DC85-X Upright",
+    origin: "Australia (designed) / China (manufactured)",
+    headlineSpec: "85L upright · vertical door · Danfoss compressor",
+    priceMinAud: 1850,
+    priceMaxAud: 2200,
+    installCostAud: 420,
+    installDays: 1,
+    editorScore: 8.6,
+    ovrlndPick: false,
+    pros: [
+      "Upright (vertical) door geometry — fits behind drawer towers like a household fridge",
+      "Largest capacity in this comparison",
+      "Perfect for Tier 3 ute canopies where chest fridges don't fit ergonomically",
+      "Genuinely Australian-designed for AU canopy interior dimensions",
+    ],
+    cons: [
+      "Upright design less efficient than chest in extreme heat",
+      "Door swing requires planning in canopy installs",
+      "Smaller dealer network",
+    ],
+    bestFor: "Ranger / Amarok / HiLux owners building a canopy camper where headroom and door access matter.",
+    fitsTiers: ["tier3"],
+    image: IMG.builtRanger,
+    shortReview:
+      "The upright format is genuinely different. If you're fitting out an Alu-Cab Canopy Camper or similar tray-back rig, this is the fridge to spec.",
+    expertReviews: [
+      { source: "Snowys Outdoors", quote: "For canopy installs, an upright fridge is a massive ergonomic upgrade." },
+    ],
+  },
+];
+
+// ────────────────────────────────────────────────────────────────────────
+// DRAWER SYSTEMS — five brands
+// ────────────────────────────────────────────────────────────────────────
+
+export const DRAWERS: Product[] = [
+  {
+    id: "msa-4x4-ds",
+    categoryId: "drawer",
+    brand: "MSA 4x4",
+    model: "Double Drawer System (custom-fit)",
+    origin: "Australia",
+    headlineSpec: "Twin drawer + wing kit · vehicle-specific tooling",
+    priceMinAud: 2400,
+    priceMaxAud: 3400,
+    installCostAud: 950,
+    installDays: 2,
+    editorScore: 9.2,
+    ovrlndPick: true,
+    pros: [
+      "True vehicle-specific tooling — drawers fit the rear wells like factory parts",
+      "Hardwood & carpet-finished tops feel furniture-grade",
+      "75kg-rated full-extension slides — hold any fridge load",
+      "Strong national dealer network and AU warranty",
+    ],
+    cons: [
+      "Premium pricing",
+      "Vehicle-specific means resale only to same-platform owner",
+      "Hardwood tops add weight",
+    ],
+    bestFor: "Buyers who want the most-finished, factory-look drawer system money can buy.",
+    fitsTiers: ["tier1", "tier3"],
+    image: IMG.builtLandcruiser300,
+    shortReview:
+      "The premium default for Land Cruiser, Defender and Ranger fitouts. You pay for the tooling and the finish — and they're worth it.",
+    expertReviews: [
+      { source: "Unsealed 4x4", quote: "MSA drawers feel like part of the car, not an aftermarket box." },
+    ],
+  },
+  {
+    id: "drifta-dst",
+    categoryId: "drawer",
+    brand: "Drifta",
+    model: "DST Drawer System",
+    origin: "Australia (Gloucester, NSW)",
+    headlineSpec: "Plywood/marine-ply twin drawer · custom-fit",
+    priceMinAud: 2200,
+    priceMaxAud: 3000,
+    installCostAud: 850,
+    installDays: 2,
+    editorScore: 9.0,
+    ovrlndPick: false,
+    pros: [
+      "Made in NSW — hand-built marine-ply construction",
+      "Cult Australian following — every Drifta is signed by the builder",
+      "Lifetime warranty on construction",
+      "Lighter than equivalent steel-frame systems",
+    ],
+    cons: [
+      "Lead times can stretch 6–12 weeks",
+      "Marine ply requires sealing maintenance over a 10+ year life",
+      "Less factory-finished aesthetic than MSA",
+    ],
+    bestFor: "Heritage-minded buyers who want a hand-built piece of Australian craft in their car.",
+    fitsTiers: ["tier1", "tier3"],
+    image: IMG.builtDefender,
+    shortReview:
+      "The artisan choice. If you wait the lead time, you get a system that feels like furniture and lasts decades.",
+    expertReviews: [
+      { source: "4WD Action", quote: "Drifta builds the most beautiful drawer systems in Australia." },
+    ],
+  },
+  {
+    id: "arb-outback-solutions",
+    categoryId: "drawer",
+    brand: "ARB",
+    model: "Outback Solutions Modular Drawer",
+    origin: "Australia",
+    headlineSpec: "Modular twin drawer + roller floor · widely stocked",
+    priceMinAud: 1900,
+    priceMaxAud: 2700,
+    installCostAud: 800,
+    installDays: 2,
+    editorScore: 8.5,
+    ovrlndPick: false,
+    pros: [
+      "Available in every ARB store — fast turnaround, no wait",
+      "Modular system — start with one drawer, add later",
+      "Strong steel framework — heaviest payload rating in this comparison",
+      "Universal ARB warranty network",
+    ],
+    cons: [
+      "Generic-fit, not vehicle-specific — gaps around the wells",
+      "Carpet finish less premium than MSA hardwood",
+      "Heaviest in the test",
+    ],
+    bestFor: "Buyers who want immediate availability and the ability to expand the system over time.",
+    fitsTiers: ["tier1", "tier2", "tier3"],
+    image: IMG.builtRanger,
+    shortReview:
+      "The convenient choice. You give up the bespoke fit, but you get an ARB-supported modular system you can add to as your needs evolve.",
+    expertReviews: [
+      { source: "Pat Callinan's 4x4 Adventures", quote: "For payload and expandability, ARB Outback Solutions is hard to beat." },
+    ],
+  },
+  {
+    id: "front-runner-ssd",
+    categoryId: "drawer",
+    brand: "Front Runner",
+    model: "Slide & Stainless Drawer Kit",
+    origin: "South Africa",
+    headlineSpec: "Aluminium frame + stainless slide · bolt-together",
+    priceMinAud: 1800,
+    priceMaxAud: 2400,
+    installCostAud: 750,
+    installDays: 2,
+    editorScore: 8.4,
+    ovrlndPick: false,
+    pros: [
+      "Lightest system in the test — aluminium frame, no plywood",
+      "Bolt-together architecture — fully reconfigurable",
+      "Best resale value internationally — Front Runner is the global standard",
+      "Integrates with Front Runner Slimline II roof rack ecosystem",
+    ],
+    cons: [
+      "Less furniture-finished than MSA or Drifta",
+      "Smaller AU dealer network",
+      "Generic-fit aesthetic — visible gaps without filler panels",
+    ],
+    bestFor: "Tier 2 EV builds and weight-conscious buyers who want global parts availability.",
+    fitsTiers: ["tier1", "tier2", "tier3"],
+    image: IMG.builtCybertruck,
+    shortReview:
+      "The international standard. If you might ship the car overseas one day, or you're building a Cybertruck/Rivian where every kg matters, Front Runner is the smart pick.",
+    expertReviews: [
+      { source: "Expedition Portal", quote: "Front Runner's modular system has crossed every continent — global compatibility is genuinely valuable." },
+    ],
+  },
+  {
+    id: "bushco-270xt-d",
+    categoryId: "drawer",
+    brand: "The Bush Company",
+    model: "Modular Tray Storage System",
+    origin: "Australia (designed) / Vietnam (manufactured)",
+    headlineSpec: "Tier 3 ute tray drawers + integrated wing kit",
+    priceMinAud: 2000,
+    priceMaxAud: 2800,
+    installCostAud: 800,
+    installDays: 2,
+    editorScore: 8.3,
+    ovrlndPick: false,
+    pros: [
+      "Designed specifically for tray-back utes — drawers + wings + canopy integration",
+      "Pairs natively with Bush Company canopies and 270XT awning",
+      "Anodised aluminium throughout — coastal-safe",
+      "Modular — choose drawer count and wing config",
+    ],
+    cons: [
+      "Tier 3 ute focus — not a Defender/G-Wagon solution",
+      "Canopy required for full integration",
+      "Newer to market — fewer long-term reviews than MSA/Drifta",
+    ],
+    bestFor: "Ranger / Amarok / HiLux owners building a Bush Company-systemised tray.",
+    fitsTiers: ["tier3"],
+    image: IMG.builtRanger,
+    shortReview:
+      "The systems-thinking choice for ute builds. If you're going Bush Company canopy and awning, the matching drawers complete the kit.",
+    expertReviews: [
+      { source: "Loaded 4x4", quote: "As a single-brand tray-back system, Bush Company is now hard to beat." },
+    ],
+  },
+];
+
+// ────────────────────────────────────────────────────────────────────────
+// UNIFIED CATALOGUE & HELPERS
+// ────────────────────────────────────────────────────────────────────────
+
+export const PRODUCTS_BY_CATEGORY: Record<string, Product[]> = {
+  awning: AWNINGS,
+  electrical: ELECTRICAL,
+  fridge: FRIDGES,
+  drawer: DRAWERS,
+};
+
+export const getProductsForVehicleAndCategory = (vehicleId: string, categoryId: string): Product[] => {
+  const vehicle = getVehicleById(vehicleId);
+  if (!vehicle) return [];
+  const products = PRODUCTS_BY_CATEGORY[categoryId];
+  if (!products) return [];
+  return products.filter((p) => p.fitsTiers.includes(vehicle.tier));
+};

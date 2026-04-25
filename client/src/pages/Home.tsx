@@ -29,7 +29,7 @@ const CATEGORY_ICON: Record<string, React.ComponentType<{ className?: string; st
 export default function Home() {
   const [activeTier, setActiveTier] = useState<Tier>("tier1");
   const [, navigate] = useLocation();
-  const { setVehicle } = useBuild();
+  const { build, setVehicle } = useBuild();
 
   const tierVehicles = useMemo(
     () => VEHICLES.filter((v) => v.tier === activeTier).sort((a, b) => a.popularityRank - b.popularityRank),
@@ -256,20 +256,24 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {CATEGORIES.filter((c) => c.id !== "rtt").map((cat) => {
               const Icon = CATEGORY_ICON[cat.id] ?? Tent;
+              const isLive = cat.status === "live";
+              // If a vehicle is already chosen jump to its comparison; else send to build picker
+              const target = build.vehicleId
+                ? `/compare/${build.vehicleId}/${cat.id}`
+                : `/build`;
               return (
-                <div
-                  key={cat.id}
-                  className="border border-foreground/10 bg-background p-5 hover:border-foreground/40 transition-colors"
-                >
-                  <Icon className="w-6 h-6 text-foreground/70" strokeWidth={1.5} />
-                  <h4 className="mt-4 font-display text-[1.15rem] leading-tight">{cat.shortName}</h4>
-                  <p className="mt-2 text-[0.85rem] text-muted-foreground leading-relaxed line-clamp-3">
-                    {cat.description}
-                  </p>
-                  <p className="mt-4 font-mono text-[0.6rem] tracking-[0.18em] uppercase text-muted-foreground/70">
-                    {cat.status === "live" ? "Live" : "Coming Soon"}
-                  </p>
-                </div>
+                <Link key={cat.id} href={target}>
+                  <span className="group block border border-foreground/10 bg-background p-5 hover:border-foreground/50 hover:bg-foreground/[0.02] transition-colors cursor-pointer h-full">
+                    <Icon className="w-6 h-6 text-foreground/70 group-hover:text-accent transition-colors" strokeWidth={1.5} />
+                    <h4 className="mt-4 font-display text-[1.15rem] leading-tight">{cat.shortName}</h4>
+                    <p className="mt-2 text-[0.85rem] text-muted-foreground leading-relaxed line-clamp-3">
+                      {cat.description}
+                    </p>
+                    <p className={`mt-4 font-mono text-[0.6rem] tracking-[0.18em] uppercase ${isLive ? "text-accent" : "text-muted-foreground/70"}`}>
+                      {isLive ? "Live · Compare brands →" : "Coming Soon"}
+                    </p>
+                  </span>
+                </Link>
               );
             })}
           </div>

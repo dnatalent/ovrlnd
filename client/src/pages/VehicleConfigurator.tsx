@@ -168,7 +168,7 @@ export default function VehicleConfigurator() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border border border-border">
             {CATEGORIES.map((c, idx) => {
-              const isLive = c.id === "rtt"; // For MVP, only RTT category is fully populated
+              const isLive = c.status === "live";
               return (
                 <button
                   key={c.id}

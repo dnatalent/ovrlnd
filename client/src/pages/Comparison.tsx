@@ -1,5 +1,7 @@
-// OVRLND — Side-by-side RTT comparison
+// OVRLND — Side-by-side brand comparison (any category)
 // Style: Cinematic Topographic. Editorial table + product cards + expert quotes.
+// Supports: rooftop tents (RTT) + awning + electrical + fridge + drawer
+// — all routed through a shared `ComparableItem` adapter.
 
 import { Link, useParams } from "wouter";
 import { SiteHeader, SiteFooter } from "@/components/SiteChrome";
@@ -7,11 +9,96 @@ import {
   getVehicleById,
   getCategoryById,
   getRTTsForVehicle,
+  getProductsForVehicleAndCategory,
   type RoofTent,
+  type Product,
 } from "@/lib/data";
 import { useBuild } from "@/contexts/BuildContext";
 import { Award, Bookmark, BookmarkCheck, Clock, DollarSign, Star } from "lucide-react";
 import { toast } from "sonner";
+
+// ────────────────────────────────────────────────────────────────────────
+// ComparableItem — the unified shape used to render any category
+// ────────────────────────────────────────────────────────────────────────
+
+interface ComparableItem {
+  id: string;
+  brand: string;
+  model: string;
+  // Headline label sits under the model name on the cards
+  // For RTT it's the "type" (e.g. "Hardshell pop-up"); for others the headlineSpec.
+  headline: string;
+  origin: string;
+  priceMinAud: number;
+  priceMaxAud: number;
+  installCostAud: number;
+  installDays: number;
+  editorScore: number;
+  ovrlndPick: boolean;
+  pros: string[];
+  cons: string[];
+  bestFor: string;
+  image: string;
+  shortReview: string;
+  expertReviews: { source: string; quote: string }[];
+  // Category-specific extra spec rows for the side-by-side table
+  extraSpecs: { label: string; value: string }[];
+}
+
+function rttToComparable(t: RoofTent): ComparableItem {
+  return {
+    id: t.id,
+    brand: t.brand,
+    model: t.model,
+    headline: t.type,
+    origin: t.origin,
+    priceMinAud: t.priceMinAud,
+    priceMaxAud: t.priceMaxAud,
+    installCostAud: t.installCostAud,
+    installDays: t.installDays,
+    editorScore: t.editorScore,
+    ovrlndPick: t.ovrlndPick,
+    pros: t.pros,
+    cons: t.cons,
+    bestFor: t.bestFor,
+    image: t.image,
+    shortReview: t.shortReview,
+    expertReviews: t.expertReviews,
+    extraSpecs: [
+      { label: "Type", value: t.type },
+      { label: "Weight", value: `${t.weightKg} kg` },
+      { label: "Sleeps", value: `${t.sleeps} pax` },
+      { label: "Setup", value: `${t.setupTimeMinutes} min` },
+    ],
+  };
+}
+
+function productToComparable(p: Product): ComparableItem {
+  return {
+    id: p.id,
+    brand: p.brand,
+    model: p.model,
+    headline: p.headlineSpec,
+    origin: p.origin,
+    priceMinAud: p.priceMinAud,
+    priceMaxAud: p.priceMaxAud,
+    installCostAud: p.installCostAud,
+    installDays: p.installDays,
+    editorScore: p.editorScore,
+    ovrlndPick: p.ovrlndPick,
+    pros: p.pros,
+    cons: p.cons,
+    bestFor: p.bestFor,
+    image: p.image,
+    shortReview: p.shortReview,
+    expertReviews: p.expertReviews,
+    extraSpecs: [{ label: "Spec", value: p.headlineSpec }],
+  };
+}
+
+// ────────────────────────────────────────────────────────────────────────
+// Page
+// ────────────────────────────────────────────────────────────────────────
 
 export default function Comparison() {
   const params = useParams<{ vehicleId: string; categoryId: string }>();
@@ -36,7 +123,58 @@ export default function Comparison() {
     );
   }
 
-  const products = getRTTsForVehicle(vehicle.id).sort((a, b) => b.editorScore - a.editorScore);
+  // Resolve products for this category
+  let items: ComparableItem[] = [];
+  if (category.id === "rtt") {
+    items = getRTTsForVehicle(vehicle.id).map(rttToComparable);
+  } else {
+    items = getProductsForVehicleAndCategory(vehicle.id, category.id).map(productToComparable);
+  }
+  items.sort((a, b) => b.editorScore - a.editorScore);
+
+  // Empty-state for any category we haven't populated yet (e.g. protection)
+  if (items.length === 0) {
+    return (
+      <div className="min-h-screen flex flex-col bg-background">
+        <SiteHeader />
+        <section className="container py-32 max-w-3xl">
+          <p className="font-mono text-[0.72rem] tracking-[0.22em] uppercase text-accent">
+            Coming soon · {category.shortName}
+          </p>
+          <h1 className="mt-4 font-display text-[2.4rem] sm:text-[3rem] leading-[1.04] font-light">
+            We're building this comparison{" "}
+            <span className="italic">right now.</span>
+          </h1>
+          <p className="mt-6 text-foreground/75 leading-relaxed">
+            The {category.shortName.toLowerCase()} matrix for the {vehicle.fullName} is queued
+            for our next editorial sprint. Founding members get first access — and a say in
+            which brands we cover first.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-4">
+            <Link href={`/build/${vehicle.id}`}>
+              <span className="inline-flex items-center gap-2 px-5 py-3 border border-foreground hover:bg-foreground hover:text-background font-mono text-[0.78rem] tracking-[0.14em] uppercase transition-colors">
+                ← Back to {vehicle.make} build
+              </span>
+            </Link>
+            <Link href="/membership">
+              <span className="inline-flex items-center gap-2 px-5 py-3 bg-foreground text-background font-mono text-[0.78rem] tracking-[0.14em] uppercase">
+                Become a member
+              </span>
+            </Link>
+          </div>
+        </section>
+        <SiteFooter />
+      </div>
+    );
+  }
+
+  // Build the union of "extraSpecs" labels across all items so the table is consistent
+  const extraLabels: string[] = [];
+  for (const it of items) {
+    for (const spec of it.extraSpecs) {
+      if (!extraLabels.includes(spec.label)) extraLabels.push(spec.label);
+    }
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
@@ -49,7 +187,7 @@ export default function Comparison() {
             Step 04 · Compare · {category.name}
           </p>
           <h1 className="mt-4 font-display text-[2.4rem] sm:text-[3.4rem] leading-[1.04] font-light max-w-4xl">
-            Six options.
+            {items.length} options.
             <br />
             <span className="italic">One ranked the way our editors actually buy.</span>
           </h1>
@@ -57,6 +195,7 @@ export default function Comparison() {
             <span>Fitted to · {vehicle.fullName}</span>
             {build.year && <span>· Year {build.year}</span>}
             {build.variant && <span>· {build.variant}</span>}
+            <span>· {category.averageInstallDays}-day average install</span>
           </div>
         </div>
       </section>
@@ -71,7 +210,7 @@ export default function Comparison() {
                   <th className="text-left font-mono text-[0.7rem] tracking-[0.16em] uppercase text-muted-foreground py-4 pr-6">
                     Spec
                   </th>
-                  {products.map((p) => (
+                  {items.map((p) => (
                     <th key={p.id} className="text-left py-4 px-3 align-top min-w-[180px]">
                       <div className="flex items-start justify-between gap-2">
                         <div>
@@ -95,47 +234,39 @@ export default function Comparison() {
               </thead>
               <tbody className="text-[0.88rem]">
                 <SpecRow
-                  label="Type"
-                  values={products.map((p) => p.type)}
-                />
-                <SpecRow
                   label="Price (RRP)"
-                  values={products.map(
+                  values={items.map(
                     (p) => `$${p.priceMinAud.toLocaleString()} – $${p.priceMaxAud.toLocaleString()}`,
                   )}
                   mono
                 />
                 <SpecRow
                   label="Install"
-                  values={products.map(
-                    (p) => `+$${p.installCostAud.toLocaleString()} · ${p.installDays} days`,
+                  values={items.map(
+                    (p) => `+$${p.installCostAud.toLocaleString()} · ${p.installDays} ${p.installDays === 1 ? "day" : "days"}`,
                   )}
                   mono
                 />
-                <SpecRow
-                  label="Weight"
-                  values={products.map((p) => `${p.weightKg} kg`)}
-                  mono
-                />
-                <SpecRow
-                  label="Sleeps"
-                  values={products.map((p) => `${p.sleeps} pax`)}
-                  mono
-                />
-                <SpecRow
-                  label="Setup"
-                  values={products.map((p) => `${p.setupTimeMinutes} min`)}
-                  mono
-                />
+                {extraLabels.map((label) => (
+                  <SpecRow
+                    key={label}
+                    label={label}
+                    values={items.map((p) => {
+                      const found = p.extraSpecs.find((s) => s.label === label);
+                      return found ? found.value : "—";
+                    })}
+                    mono={label === "Weight" || label === "Setup" || label === "Sleeps"}
+                  />
+                ))}
                 <SpecRow
                   label="Origin"
-                  values={products.map((p) => p.origin)}
+                  values={items.map((p) => p.origin)}
                 />
                 <tr className="border-b border-border">
                   <td className="py-4 pr-6 font-mono text-[0.7rem] tracking-[0.16em] uppercase text-muted-foreground">
                     Editor score
                   </td>
-                  {products.map((p) => (
+                  {items.map((p) => (
                     <td key={p.id} className="py-4 px-3">
                       <div className="flex items-center gap-2">
                         <span className="font-display text-[1.5rem] font-medium leading-none">
@@ -155,7 +286,7 @@ export default function Comparison() {
       {/* Editorial product cards */}
       <section className="pb-24">
         <div className="container space-y-12">
-          {products.map((p, idx) => (
+          {items.map((p, idx) => (
             <ProductDetail
               key={p.id}
               product={p}
@@ -249,7 +380,7 @@ function ProductDetail({
   isSaved,
   onToggleSave,
 }: {
-  product: RoofTent;
+  product: ComparableItem;
   ordinal: string;
   isSaved: boolean;
   onToggleSave: () => void;
@@ -275,7 +406,7 @@ function ProductDetail({
       <div className="lg:col-span-7">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="ordinal">{ordinal} · {product.type}</p>
+            <p className="ordinal">{ordinal} · {product.headline}</p>
             <h3 className="mt-2 font-display text-[1.85rem] sm:text-[2.3rem] font-medium leading-tight">
               {product.brand} <span className="italic font-light">{product.model}</span>
             </h3>
@@ -311,7 +442,7 @@ function ProductDetail({
           <div className="flex items-center gap-2 text-[0.85rem]">
             <Clock className="w-3.5 h-3.5 text-muted-foreground" strokeWidth={1.5} />
             <span className="font-mono">
-              {product.installDays}-day install · ${product.installCostAud.toLocaleString()}
+              {product.installDays}-{product.installDays === 1 ? "day" : "day"} install · ${product.installCostAud.toLocaleString()}
             </span>
           </div>
         </div>
